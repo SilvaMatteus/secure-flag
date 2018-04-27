@@ -1,0 +1,17 @@
+enclave {
+    include "sgx_trts.h"
+
+    trusted {
+        // AES_GCM
+        public sgx_status_t encrypt_flag_ecall( [ in, size=flag_size ] uint8_t *p_flag, size_t flag_size,  [ out, size=encrypted_size ] uint8_t *p_iv_mac_enc_flag, size_t encrypted_size );
+        public sgx_status_t decrypt_flag_ecall( [in, size=encrypted_flag_size ] uint8_t *p_iv_mac_encrypted_flag, size_t encrypted_flag_size, [ out, size=flag_size ] uint8_t *p_flag, size_t flag_size );
+
+        // AES_CTR
+        public sgx_status_t encrypt_flag_aes_ctr_ecall( [ in, size=flag_size ] uint8_t *p_flag, size_t flag_size,  [ out, size=iv_enc_ctr_flag_size ] uint8_t *p_iv_enc_ctr_flag, size_t iv_enc_ctr_flag_size );
+        public sgx_status_t decrypt_flag_aes_ctr_ecall( [in, size=iv_ctr_enc_flag_size ] uint8_t *p_iv_ctr_encrypted_flag, size_t iv_ctr_enc_flag_size, [ out, size=flag_size ] uint8_t *p_flag, size_t flag_size );
+    };
+    untrusted {
+        void print_string_ocall( [in, string] char *str );
+        void print_byte_array_ocall( [in, size=len] void *mem, size_t len );
+    };
+};
